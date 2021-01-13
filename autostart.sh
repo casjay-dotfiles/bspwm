@@ -19,16 +19,22 @@ cmd_exist() {
   unalias "$1" >/dev/null 2>&1
   command -v "$1" >/dev/null 2>&1
 }
-__kill() { kill -9 "$(pidof "$1")" >/dev/null 2>&1; }
-__start() { sleep 1 && "$@" >/dev/null 2>&1 & }
-__running() { pidof "$1" >/dev/null 2>&1; }
+__kill() {
+  kill -9 "$(pidof "$1")" >/dev/null 2>&1
+}
+__start() {
+  sleep 1 && "$@" >/dev/null 2>&1 &
+}
+__running() {
+  pidof "$1" >/dev/null 2>&1
+}
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # sudo password using dmenu
 
 if cmd_exist dmenupass; then
-  SUDO_ASKPASS="dmenupass"
+  export SUDO_ASKPASS="dmenupass"
 fi
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -309,9 +315,7 @@ if cmd_exist transmission-daemon && ! __running transmission-daemon; then
   __start transmission-daemon
 elif cmd_exist transmission-gtk && ! __running transmission-gtk; then
   __start transmission-gtk -m
-fi
-
-if cmd_exist transmission-remote-gtk && ! __running transmission-remote-gtk && __running transmission-daemon; then
+elif cmd_exist transmission-remote-gtk && ! __running transmission-remote-gtk && __running transmission-daemon; then
   __start transmission-remote-gtk -m
 fi
 
