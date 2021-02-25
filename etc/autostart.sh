@@ -60,7 +60,7 @@ __cmd_exist xrandr && [ -n "$DISPLAY" ] &&
 export SUDO_ASKPASS DESKTOP_SESSION DESKTOP_SESSION_CONFDIR RESOLUTION
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# Panel
+# Panel - not needed for awesome i3 qtile sway xmonad
 if __stopped xfce4-panel; then
   if __cmd_exist polybar; then
     __kill polybar
