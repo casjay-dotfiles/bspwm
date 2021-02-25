@@ -58,26 +58,23 @@ __cmd_exist xrandr && [ -n "$DISPLAY" ] &&
 export SUDO_ASKPASS DESKTOP_SESSION DESKTOP_SESSION_CONFDIR RESOLUTION
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# Panel - not needed for awesome i3 qtile xmonad
-if [ "$DESKTOP_SESSION" != "awesome" ] || [ "$DESKTOP_SESSION" != "i3" ] || [ "$DESKTOP_SESSION" != "sway" ] ||
-  [ "$DESKTOP_SESSION" != "qtile" ] || [ "$DESKTOP_SESSION" != "xmonad" ] || [ "$DESKTOP_SESSION" != "xfce4" ]; then
-  if ! __running xfce4-panel; then
-    if __cmd_exist polybar; then
-      __kill polybar
-      __start "$HOME/.config/polybar/launch.sh"
-    elif __cmd_exist tint2; then
-      __kill tint2
-      __start tint2 -c "$HOME/.config/tint2/tint2rc"
-    elif __cmd_exist lemonbar; then
-      __kill lemonbar
-      __start "$HOME/.config/lemonbar/lemonbar.sh"
-    else
-      PANEL="none"
-    fi
-    if [ "$PANEL" = "none" ] && __cmd_exist xfce4-session && __cmd_exist xfce4-panel; then
-      __kill xfce4-panel
-      __start xfce4-panel
-    fi
+# Panel
+if ! __running xfce4-panel; then
+  if __cmd_exist polybar; then
+    __kill polybar
+    __start "$HOME/.config/polybar/launch.sh"
+  elif __cmd_exist tint2; then
+    __kill tint2
+    __start tint2 -c "$HOME/.config/tint2/tint2rc"
+  elif __cmd_exist lemonbar; then
+    __kill lemonbar
+    __start "$HOME/.config/lemonbar/lemonbar.sh"
+  else
+    PANEL="none"
+  fi
+  if [ "$PANEL" = "none" ] && __cmd_exist xfce4-session && __cmd_exist xfce4-panel; then
+    __kill xfce4-panel
+    __start xfce4-panel
   fi
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -277,6 +274,7 @@ fi
 # Welcome Message
 if __cmd_exist notifications; then
   sleep 90 && notifications "$DESKTOP_SESSION" "Welcome $USER to $DESKTOP_SESSION Desktop" &
+  disown
 fi
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # final
