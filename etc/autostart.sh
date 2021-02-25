@@ -26,9 +26,11 @@ HOME="${USER_HOME:-${HOME}}"
 [[ "$1" = *help ]] && printf "%s\n" "Usage: autostart.sh" "Starts applications for bspwm window manager" && exit
 
 # Set functions
-__running() { __pid "$1" >/dev/null 2>&1; }
-__pid() { ps -ux | grep "$1" | grep -v 'grep ' | awk '{print $2}'; }
+__pid() { ps -ux | grep " $1" | grep -v 'grep ' | awk '{print $2}' | grep ^ || return 1; }
 __kill() { __running "$1" && kill -9 "$(__pid "$1")" >/dev/null 2>&1; }
+__running() { __pid "$1" &>/dev/null && return 0 || return 1; }
+__stopped() { __pid "$1" &>/dev/null && return 1 || return 0; }
+
 __cmd_exist() {
   unalias "$1" >/dev/null 2>&1
   command -v "$1" >/dev/null 2>&1
@@ -59,7 +61,7 @@ export SUDO_ASKPASS DESKTOP_SESSION DESKTOP_SESSION_CONFDIR RESOLUTION
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Panel
-if ! __running xfce4-panel; then
+if __stopped xfce4-panel; then
   if __cmd_exist polybar; then
     __kill polybar
     __start "$HOME/.config/polybar/launch.sh"
