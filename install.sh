@@ -78,7 +78,7 @@ show_optvars "$@"
 dfmgr_run_init
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # end with a space
-APP="$APPNAME xsltproc fcitx screenfetch scrot screenkey xsettingsd sxhkd xdo catfish "
+APP="$APPNAME xsltproc fcitx screenfetch scrot screenkey xsettingsd sxhkd xdo catfish lxappearance qt5ct "
 APP+="xfce4-terminal xfce4-power-manager volumeicon xscreensaver conky tint2 xbindkeys firefox notify-send iwconfig "
 PERL=""
 PYTH=""
